@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bernhards Legendäre 50er Party 🎸🎬</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel+Decorative:wght@700&family=Oswald:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --gold: #FFD700;
+      --gold2: #FFA500;
+      --dark: #0a0a0a;
+      --red: #8B0000;
+      --cream: #FFF8E7;
+      --glow: 0 0 20px #FFD700aa, 0 0 40px #FFD70055;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--dark);
+      color: var(--cream);
+      font-family: 'Oswald', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated starfield */
+    .stars {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .star {
+      position: absolute;
+      background: #FFD700;
+      border-radius: 50%;
+      animation: twinkle var(--d, 3s) infinite alternate;
+      opacity: 0;
+    }
+    @keyframes twinkle {
+      0% { opacity: 0; transform: scale(0.5); }
+      100% { opacity: 1; transform: scale(1.2); }
+    }
+
+    /* Spotlight beams */
+    .spotlights {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .spotlight {
+      position: absolute;
+      top: -10%;
+      width: 200px;
+      height: 80vh;
+      background: linear-gradient(180deg, rgba(255,200,0,0.12) 0%, transparent 100%);
+      transform-origin: top center;
+      animation: sweep var(--sd, 6s) ease-in-out infinite alternate;
+    }
+    .spotlight:nth-child(1) { left: 10%; --sd: 5s; transform: rotate(-15deg); }
+    .spotlight:nth-child(2) { left: 50%; --sd: 7s; transform: rotate(5deg); }
+    .spotlight:nth-child(3) { right: 10%; --sd: 6s; transform: rotate(15deg); }
+    @keyframes sweep {
+      from { transform: rotate(-20deg); }
+      to   { transform: rotate(20deg); }
+    }
+
+    /* Main layout */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+      animation: fadeDown 1s ease both;
+    }
+    @keyframes fadeDown {
+      from { opacity:0; transform: translateY(-30px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+    .main-title {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: clamp(1.8rem, 6vw, 3rem);
+      background: linear-gradient(135deg, #FFD700, #FF8C00, #FFD700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
+      filter: drop-shadow(0 0 12px #FFD70088);
+      line-height: 1.2;
+      letter-spacing: 0.05em;
+    }
+    .subtitle {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.1rem, 4vw, 1.6rem);
+      color: var(--gold2);
+      letter-spacing: 0.2em;
+      margin-top: 8px;
+    }
+
+    /* Ticket border decoration */
+    .ticket-border {
+      border: 3px solid var(--gold);
+      border-radius: 4px;
+      padding: 3px;
+      box-shadow: var(--glow);
+      margin-bottom: 28px;
+      animation: fadeUp 1s ease 0.3s both;
+    }
+    .ticket-inner {
+      border: 1px solid rgba(255,215,0,0.3);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(30px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    /* Invitation image */
+    .invite-img {
+      width: 100%;
+      display: block;
+    }
+
+    /* Info strip */
+    .info-strip {
+      background: linear-gradient(135deg, #1a0a00 0%, #2d1500 50%, #1a0a00 100%);
+      border: 2px solid var(--gold);
+      border-radius: 4px;
+      padding: 24px;
+      margin-bottom: 28px;
+      text-align: center;
+      box-shadow: var(--glow), inset 0 0 40px rgba(255,165,0,0.05);
+      animation: fadeUp 1s ease 0.5s both;
+    }
+    .info-strip .event-date {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.4rem, 5vw, 2rem);
+      color: var(--gold);
+      letter-spacing: 0.15em;
+    }
+    .info-strip .event-location {
+      font-size: 1.1rem;
+      color: var(--cream);
+      margin-top: 6px;
+    }
+    .info-strip .event-time {
+      font-size: 1rem;
+      color: var(--gold2);
+      margin-top: 4px;
+    }
+    .info-strip .deadline {
+      margin-top: 12px;
+      font-size: 0.85rem;
+      color: #ff9944;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Costume section */
+    .costume-section {
+      background: linear-gradient(135deg, #0d0005 0%, #1a000f 50%, #0d0005 100%);
+      border: 2px solid var(--red);
+      border-radius: 4px;
+      padding: 24px;
+      margin-bottom: 28px;
+      box-shadow: 0 0 20px #8B000066, inset 0 0 40px rgba(139,0,0,0.05);
+      animation: fadeUp 1s ease 0.7s both;
+    }
+    .costume-section h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      color: var(--gold);
+      letter-spacing: 0.2em;
+      text-align: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255,215,0,0.3);
+      padding-bottom: 12px;
+    }
+    .costume-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .costume-col h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      margin-bottom: 10px;
+      padding: 6px 12px;
+      border-radius: 2px;
+      text-align: center;
+    }
+    .rockstar-col h3 { background: rgba(255,100,0,0.2); color: #FF6B35; border: 1px solid #FF6B3555; }
+    .filmstar-col h3 { background: rgba(255,215,0,0.1); color: var(--gold); border: 1px solid var(--gold); }
+    .costume-list { list-style: none; }
+    .costume-list li {
+      padding: 6px 0;
+      font-size: 0.9rem;
+      color: var(--cream);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .costume-list li:last-child { border-bottom: none; }
+    .costume-list li span.icon { font-size: 1.1rem; flex-shrink: 0; }
+
+    /* RSVP Form */
+    .rsvp-section {
+      background: linear-gradient(135deg, #050510 0%, #0a0a20 50%, #050510 100%);
+      border: 2px solid var(--gold);
+      border-radius: 4px;
+      padding: 28px;
+      box-shadow: var(--glow);
+      animation: fadeUp 1s ease 0.9s both;
+    }
+    .rsvp-section h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--gold);
+      letter-spacing: 0.2em;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .rsvp-section p.rsvp-sub {
+      text-align: center;
+      color: rgba(255,248,231,0.6);
+      font-size: 0.85rem;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold2);
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,215,0,0.3);
+      border-radius: 2px;
+      color: var(--cream);
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 12px rgba(255,215,0,0.2);
+    }
+    .form-group select option { background: #1a1a00; color: var(--cream); }
+
+    .attendance-toggle {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .toggle-btn {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid rgba(255,215,0,0.3);
+      background: transparent;
+      color: rgba(255,248,231,0.5);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .toggle-btn.active-yes {
+      background: rgba(0,200,80,0.15);
+      border-color: #00c850;
+      color: #00c850;
+      box-shadow: 0 0 12px rgba(0,200,80,0.2);
+    }
+    .toggle-btn.active-no {
+      background: rgba(200,0,0,0.15);
+      border-color: #c80000;
+      color: #ff4444;
+      box-shadow: 0 0 12px rgba(200,0,0,0.2);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #8B6000, #FFD700, #8B6000);
+      background-size: 200% 100%;
+      border: none;
+      color: #0a0a0a;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.2em;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: background-position 0.5s, transform 0.2s, box-shadow 0.3s;
+      box-shadow: 0 4px 20px rgba(255,215,0,0.3);
+    }
+    .submit-btn:hover {
+      background-position: right;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(255,215,0,0.5);
+    }
+    .submit-btn:active { transform: translateY(0); }
+
+    /* Success message */
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 24px;
+    }
+    .success-msg .checkmark { font-size: 3rem; margin-bottom: 12px; }
+    .success-msg h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--gold);
+      letter-spacing: 0.15em;
+    }
+    .success-msg p { color: rgba(255,248,231,0.7); margin-top: 8px; font-size: 0.9rem; }
+
+    /* Marquee ticker */
+    .ticker-wrap {
+      overflow: hidden;
+      border-top: 1px solid rgba(255,215,0,0.3);
+      border-bottom: 1px solid rgba(255,215,0,0.3);
+      padding: 10px 0;
+      margin-bottom: 28px;
+      animation: fadeUp 1s ease 0.6s both;
+    }
+    .ticker {
+      display: flex;
+      animation: ticker 20s linear infinite;
+      white-space: nowrap;
+    }
+    .ticker span {
+      color: var(--gold2);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.2em;
+      padding: 0 40px;
+    }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: rgba(255,248,231,0.3);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+    }
+
+    @media (max-width: 480px) {
+      .costume-cols { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Starfield -->
+<div class="stars" id="stars"></div>
+<!-- Spotlights -->
+<div class="spotlights">
+  <div class="spotlight"></div>
+  <div class="spotlight"></div>
+  <div class="spotlight"></div>
+</div>
+
+<div class="container">
+
+  <header>
+    <div class="main-title">Bernhards Legendäre<br>50er Party</div>
+    <div class="subtitle">🎸 Be a Rock- or Filmstar! 🎬</div>
+  </header>
+
+  <!-- Invitation Image -->
+  <div class="ticket-border">
+    <div class="ticket-inner">
+      <img class="invite-img" src="einladung.png" alt="Einladung zur legendären 50er Party" />
+    </div>
+  </div>
+
+  <!-- Ticker -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span>🎸 SAMSTAG 13. JUNI 2026</span>
+      <span>🎬 SALONSCHIFF FRÄULEIN FLORENTINE</span>
+      <span>⭐ AB 18:00 UHR</span>
+      <span>🏆 RÜCKMELDUNG BIS 30. APRIL</span>
+      <span>🎸 SAMSTAG 13. JUNI 2026</span>
+      <span>🎬 SALONSCHIFF FRÄULEIN FLORENTINE</span>
+      <span>⭐ AB 18:00 UHR</span>
+      <span>🏆 RÜCKMELDUNG BIS 30. APRIL</span>
+    </div>
+  </div>
+
+  <!-- Costume Ideas -->
+  <div class="costume-section">
+    <h2>🎭 Verkleidungsideen</h2>
+    <div class="costume-cols">
+      <div class="costume-col rockstar-col">
+        <h3>🎸 Rockstar</h3>
+        <ul class="costume-list">
+          <li><span class="icon">👑</span> Freddie Mercury</li>
+          <li><span class="icon">🤘</span> Mick Jagger</li>
+          <li><span class="icon">⚡</span> David Bowie / Ziggy</li>
+          <li><span class="icon">🎤</span> Elvis Presley</li>
+          <li><span class="icon">🖤</span> Ozzy Osbourne</li>
+          <li><span class="icon">💜</span> Prince</li>
+          <li><span class="icon">🎸</span> Kurt Cobain</li>
+          <li><span class="icon">🕶️</span> Glam-Rocker Eigen-Stil</li>
+        </ul>
+      </div>
+      <div class="costume-col filmstar-col">
+        <h3>🎬 Filmstar</h3>
+        <ul class="costume-list">
+          <li><span class="icon">🕵️</span> James Bond</li>
+          <li><span class="icon">👗</span> Marilyn Monroe</li>
+          <li><span class="icon">🥋</span> Bruce Lee</li>
+          <li><span class="icon">🦸</span> Indiana Jones</li>
+          <li><span class="icon">🌹</span> Audrey Hepburn</li>
+          <li><span class="icon">🤵</span> Al Pacino / Scarface</li>
+          <li><span class="icon">👨‍🦳</span> The Godfather</li>
+          <li><span class="icon">🏆</span> Oscar-Gewinner Look</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- RSVP Form -->
+  <div class="rsvp-section">
+    <h2>⭐ Anmeldung</h2>
+    <p class="rsvp-sub">Bitte bis 30. April 2026 anmelden</p>
+
+    <div id="rsvp-form">
+      <div class="form-group">
+        <label>Dein Name / Eure Namen</label>
+        <input type="text" id="name" placeholder="z.B. Anna & Peter Muster" />
+      </div>
+
+      <div class="form-group">
+        <label>Kommst du / kommt ihr?</label>
+        <div class="attendance-toggle">
+          <button class="toggle-btn" id="btn-yes" onclick="setAttendance('yes')">✅ Ja, wir rocken!</button>
+          <button class="toggle-btn" id="btn-no" onclick="setAttendance('no')">❌ Leider nein</button>
+        </div>
+      </div>
+
+      <div id="extra-fields">
+        <div class="form-group">
+          <label>Anzahl der Personen</label>
+          <select id="count">
+            <option value="">Bitte wählen …</option>
+            <option value="1">1 Person</option>
+            <option value="2">2 Personen</option>
+            <option value="3">3 Personen</option>
+            <option value="4">4 Personen</option>
+            <option value="5+">5 oder mehr</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Geplante Verkleidung (optional)</label>
+          <input type="text" id="costume" placeholder="z.B. David Bowie & Marilyn Monroe" />
+        </div>
+      </div>
+
+      <button class="submit-btn" onclick="submitRSVP()">🎬 Anmeldung absenden 🎸</button>
+    </div>
+
+    <div class="success-msg" id="success-msg">
+      <div class="checkmark">🎉</div>
+      <h3>Danke für deine Anmeldung!</h3>
+      <p id="success-text">Bernhard freut sich riesig auf euch!<br>Bis zum 13. Juni 2026!</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Bernhards Legendäre 50er Party &nbsp;·&nbsp; Made with 🤘 & 🎬</p>
+  </footer>
+</div>
+
+<script>
+  // Stars
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 3 + 1;
+    s.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      --d:${(Math.random()*4+2).toFixed(1)}s;
+      animation-delay:${(Math.random()*5).toFixed(1)}s;
+    `;
+    starsEl.appendChild(s);
+  }
+
+  let attendance = null;
+
+  function setAttendance(val) {
+    attendance = val;
+    const btnYes = document.getElementById('btn-yes');
+    const btnNo = document.getElementById('btn-no');
+    const extra = document.getElementById('extra-fields');
+    btnYes.className = 'toggle-btn' + (val === 'yes' ? ' active-yes' : '');
+    btnNo.className = 'toggle-btn' + (val === 'no' ? ' active-no' : '');
+    extra.style.display = val === 'yes' ? 'block' : 'none';
+  }
+
+  // Hide extra fields by default
+  document.getElementById('extra-fields').style.display = 'none';
+
+  function submitRSVP() {
+    const name = document.getElementById('name').value.trim();
+    if (!name) { alert('Bitte gib deinen Namen ein!'); return; }
+    if (!attendance) { alert('Bitte wähle ob du kommst!'); return; }
+    if (attendance === 'yes') {
+      const count = document.getElementById('count').value;
+      if (!count) { alert('Bitte wähle die Anzahl der Personen!'); return; }
+    }
+
+    const costume = document.getElementById('costume')?.value || '';
+    document.getElementById('rsvp-form').style.display = 'none';
+    const successEl = document.getElementById('success-msg');
+    successEl.style.display = 'block';
+
+    if (attendance === 'no') {
+      successEl.querySelector('h3').textContent = 'Schade, du fehlst uns!';
+      document.getElementById('success-text').textContent = 'Vielleicht klappt es beim nächsten Mal. 🙏';
+    } else {
+      const costumeText = costume ? `\n🎭 Verkleidung: ${costume}` : '';
+      document.getElementById('success-text').innerHTML =
+        `Bernhard freut sich riesig auf euch!${costumeText ? '<br>🎭 Verkleidung: ' + costume : ''}<br><br>Bis zum 13. Juni 2026! 🎉`;
+    }
+  }
+</script>
+</body>
+</html>
